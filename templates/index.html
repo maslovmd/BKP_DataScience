@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Прогнозирование соотношения матрица-наполнитель</title>
+    <style>
+        body {
+            background-color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .form-panel {
+            background-color: #f0f0f0; /* светло-серый */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e8f5e9;
+            border-radius: 4px;
+            text-align: center;
+            font-size: 18px;
+        }
+        .error {
+            color: #ff0000;
+            background-color: #ffebee;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+        .note {
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Прогнозирование соотношения матрица-наполнитель</h1>
+        
+        <div class="form-panel">
+            {% if error %}
+                <div class="error">{{ error }}</div>
+            {% endif %}
+            
+            <form method="POST">
+                {% for feature in [
+                    'Плотность, кг/м3',
+                    'модуль упругости, ГПа',
+                    'Количество отвердителя, м.%',
+                    'Содержание эпоксидных групп,%_2',
+                    'Температура вспышки, С_2',
+                    'Поверхностная плотность, г/м2',
+                    'Модуль упругости при растяжении, ГПа',
+                    'Прочность при растяжении, МПа',
+                    'Потребление смолы, г/м2',
+                    'Угол нашивки',
+                    'Шаг нашивки',
+                    'Плотность нашивки'
+                ] %}
+                <div class="form-group">
+                    <label for="{{ feature }}">{{ feature }}:</label>
+                    <input type="text" id="{{ feature }}" name="{{ feature }}" 
+                           placeholder="Введите число">
+                     {% if feature == 'Содержание эпоксидных групп,%_2' %}
+                        <p class="note">Примечание: дробная часть должна быть после точки</p>
+                    {% if feature == 'Угол нашивки' %}
+                        <p class="note">Примечание: допустимые значения - 0 или 90</p>
+                    {% endif %}
+                </div>
+                {% endfor %}
+                
+                <button type="submit">Рассчитать</button>
+            </form>
+            
+            {% if result %}
+                <div class="result">
+                    Прогнозируемое соотношение: <strong>{{ result }}</strong>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
